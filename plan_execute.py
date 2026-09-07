@@ -29,7 +29,7 @@ from langgraph.graph import StateGraph, START, END
 from pydantic import BaseModel, Field, field_validator
 
 from agent import SYSTEM_PROMPT, SupportResponse, llm, llm_structured, tools
-from logger import TrajectoryLogger
+from trajectory_logger import TrajectoryLogger
 from safety import RunGuard
 
 # ── Structured outputs ───────────────────────────────────────────

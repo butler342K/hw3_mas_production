@@ -32,7 +32,7 @@ from langgraph.types import Command, interrupt
 from pydantic import BaseModel, Field
 
 from agent import llm
-from tools import get_order_ship_date, search_order, track_parcel, track_ukrposhta_parcel
+from tools_legacy import get_order_ship_date, search_order, track_parcel, track_ukrposhta_parcel
 
 # ── Ризиковий tool: повідомлення бухгалтеру ──────────────────────
 class NotifyAccountantInput(BaseModel):

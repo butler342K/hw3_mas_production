@@ -11,9 +11,9 @@ from langgraph.prebuilt import ToolNode
 from pydantic import BaseModel, Field, SecretStr
 
 from knowledge import search_knowledge
-from logger import TrajectoryLogger
+from trajectory_logger import TrajectoryLogger
 from safety import RunGuard
-from tools import get_order_ship_date, search_order, track_parcel, track_ukrposhta_parcel
+from tools_legacy import get_order_ship_date, search_order, track_parcel, track_ukrposhta_parcel
 
 load_dotenv()
 
@@ -65,8 +65,8 @@ if _is_local_ollama:
     )
 else:
     llm = ChatOpenAI(
-        model=os.getenv('LLM_MODEL', 'deepseek-v4-flash'),
-        base_url=_base_url,
+        model=os.getenv('LLM_MODEL', 'gpt-4.1'),
+        base_url=_base_url or None,
         api_key=SecretStr(os.getenv('OPENAI_API_KEY', '')),
         temperature=0.1,
     )

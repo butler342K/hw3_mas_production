@@ -4,7 +4,7 @@ import time
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 
 from agent import SYSTEM_PROMPT, app
-from logger import TrajectoryLogger
+from trajectory_logger import TrajectoryLogger
 from safety import RunGuard
 
 # ── Тест-кейси ──────────────────────────────────────────────────

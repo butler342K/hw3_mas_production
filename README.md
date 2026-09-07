@@ -1,4 +1,9 @@
+
+Запуск: python mcp_server.py, інспектор: npx @modelcontextprotocol/inspector python mcp_server.py.
+
 # Plan-Execute-Replan агент служби підтримки інтернет-магазину
+
+
 
 ## 1. Опис проєкту
 Розвиток ReAct-агента з hw1 (`../hw1_react_agent`) у трьох напрямках на базі LangGraph: (1) архітектура Plan-Execute-Replan з durable execution через checkpointing замість простого ReAct-циклу; (2) база знань (RAG) над ChromaDB для довідкових запитів, яких немає в CSV чи зовнішніх API; (3) human-in-the-loop підтвердження ризикової дії через `interrupt()`. Домен, tools, захисні механізми (`safety.py`) і логування траєкторії (`logger.py`) успадковані з hw1 без змін і перевикористовуються напряму.
