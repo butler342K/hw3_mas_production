@@ -225,6 +225,9 @@ agent_state.db-shm
 hitl_state.db
 hitl_state.db-wal
 hitl_state.db-shm
+mas_state.db
+mas_state.db-wal
+mas_state.db-shm
 chroma_db/
 
 data/
