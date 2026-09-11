@@ -51,11 +51,11 @@ from langgraph.types import Command, interrupt
 from pydantic import BaseModel, Field
 
 from agent import SupportResponse, llm, llm_structured
-from guardrails import apply_output_guardrails, validate_input
 from hitl import RISKY_TOOLS, TOOLS_BY_NAME, _resolve_decision, notify_accountant
 from knowledge import search_knowledge
 from safety import RunGuard
 from tools_legacy import get_order_ship_date, search_order, track_parcel, track_ukrposhta_parcel
+from observability import traced_apply_output_guardrails, traced_validate_input
 from trajectory_logger import TrajectoryLogger
 
 MAX_HANDOFFS = 6  # запобіжник від зациклення triage <-> спеціаліст
@@ -143,7 +143,7 @@ def triage_node(state: MASState) -> dict:
 
     # Input guardrail — лише на першому вході (сирий запит клієнта).
     if step == 0:
-        problem = validate_input(state['input'])
+        problem = traced_validate_input(state['input'])
         if problem:
             traj_logger.log('input_guardrail_blocked', {'reason': problem})
             return {'response': f'⚠️ Запит відхилено guardrail-ом: {problem}', 'step_count': step + 1}
@@ -264,7 +264,7 @@ def refund_confirm_node(state: MASState) -> dict:
 # ── Вузол respond (structured output + output guardrails) ───────
 def respond_node(state: MASState) -> dict:
     traj_logger: TrajectoryLogger = state['logger']
-    safe_response = apply_output_guardrails(state['response'])
+    safe_response = traced_apply_output_guardrails(state['response'])
     structured = llm_structured.invoke([
         SystemMessage(content='Перетвори відповідь агента підтримки клієнтів у структурований формат.'),
         HumanMessage(content=safe_response),

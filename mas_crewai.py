@@ -60,11 +60,11 @@ from crewai.tools.base_tool import Tool as CrewTool
 from langchain_core.tools import tool
 
 from agent import SupportResponse
-from guardrails import apply_output_guardrails, validate_input
 from hitl import NotifyAccountantInput, _resolve_decision, notify_accountant
 from knowledge import search_knowledge
 from safety import MAX_STEPS, TIMEOUT_SECONDS
 from tools_legacy import get_order_ship_date, search_order, track_parcel, track_ukrposhta_parcel
+from observability import traced_apply_output_guardrails, traced_validate_input
 from trajectory_logger import TrajectoryLogger
 
 LLM_MODEL = os.getenv('LLM_MODEL', 'gpt-4.1')
@@ -249,7 +249,7 @@ def run_query(query: str, trajectory_path: str = 'trajectory_mas_crewai.json') -
     traj_logger = TrajectoryLogger()
     print(f'\n{"=" * 70}\nЗапит: {query}\n{"=" * 70}')
 
-    problem = validate_input(query)
+    problem = traced_validate_input(query)
     if problem:
         traj_logger.log('input_guardrail_blocked', {'reason': problem})
         print(f'⚠️ Запит відхилено guardrail-ом: {problem}')
@@ -261,7 +261,7 @@ def run_query(query: str, trajectory_path: str = 'trajectory_mas_crewai.json') -
 
     structured: SupportResponse | None = getattr(result, 'pydantic', None)
     raw_answer = structured.answer if structured else str(result)
-    safe_answer = apply_output_guardrails(raw_answer)
+    safe_answer = traced_apply_output_guardrails(raw_answer)
     if structured:
         structured.answer = safe_answer
 
